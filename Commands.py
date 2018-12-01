@@ -13,12 +13,16 @@ class Robot:
 		self.rID = rID
 		self.lastX = xInit
 		self.lastY = yInit
+		self.theta = 0
 		self.type = self.types.pop()
 
 	# use opencv code to get current position of the robot
 	def get_position(self):
-		return get_location(self.type)
+		coord, angle = get_location(self.type)
+		self.theta = angle
+		self.lastX = coord[0]
+		self.lasty = coord[1]
 	
 	# write a move command to serial
 	def move(self, dx, dy):	
-		self.ser.write(bytes(''+str(self.rID)+' '+str(dx)+' '+str(dy)+'\n','utf-8'))
+		self.ser.write(bytes('<'+str(self.rID)+','+str(dx)+','+str(dy)+str(self.theta)'>\n','utf-8'))
