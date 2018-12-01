@@ -1,3 +1,4 @@
+from CV_script import get_location
 import serial
 
 class Robot:
@@ -15,8 +16,8 @@ class Robot:
 		self.type = self.types.pop()
 
 	# use opencv code to get current position of the robot
-	#def get_position(self):
-		
+	def get_position(self):
+		return get_location(self.type)
 	
 	# write a move command to serial
 	def move(self, dx, dy):	

@@ -59,6 +59,65 @@ def closest_dist(point, points):
 # input: 'red', 'green', or 'blue'
 # output: coordinate (numpy array of length 2) and angle (float) of robot
 def get_location(robot_id):
+	# lower and upper boundaries of colors
+	sensitivity = 10 # larger sensitivity -> more shit is classified as green
+	dist_threshold = 50 # dist threshold :)
+	greenLower = (60-sensitivity, 100, 50)
+	greenUpper = (60+sensitivity, 255, 255)
+	redLower = (175-sensitivity,20,70)
+	redUpper = (175+sensitivity,255,255)
+	blueLower = (105-sensitivity,50,38)
+	blueUpper = (105+sensitivity,255,255)
+	
+	# define default robot positions
+	num_points_red_robot = 2
+	num_points_green_robot = 0
+	num_points_blue_robot = 1
+	blue_robot = []
+	red_robot = []
+	green_robot = []
+    	# grab video capture from webcam
+	capture = cv2.VideoCapture(0)
+	# let camera start up
+	time.sleep(2.0)
+
+	# look for relevant points until we find it
+	while not(len(blue_robot) == num_points_blue_robot and len(red_robot) == num_points_red_robot and len(green_robot) == num_points_green_robot):
+		# grab a frame
+		ret, frame = capture.read()
+		
+		# CV preprocessing
+		blurred = cv2.GaussianBlur(frame, (5, 5), 0)
+		hsv = cv2.cvtColor(blurred, cv2.COLOR_BGR2HSV)
+		mask_red = create_mask(hsv, redLower, redUpper)
+		mask_green = create_mask(hsv, greenLower, greenUpper)
+		mask_blue = create_mask(hsv, blueLower, blueUpper)
+		
+		# CV mask -> coordinate		
+		centers_red = find_centers(mask_red)
+		centers_green = find_centers(mask_green)
+		centers_blue = find_centers(mask_blue)
+		
+		# update robot locations
+		for center in centers_green:
+			min_dist, min_idx = closest_dist(center, green_robot)
+			if min_dist < dist_threshold and min_idx != -1:
+				green_robot[min_idx] = center
+			elif len(green_robot) < num_points_green_robot:
+				green_robot.append(center)			
+		for center in centers_red:
+			min_dist, min_idx = closest_dist(center, red_robot)
+			if min_dist < dist_threshold and min_idx != -1:
+				red_robot[min_idx] = center
+			elif len(red_robot) < num_points_red_robot:
+				red_robot.append(center)
+		for center in centers_blue:
+			min_dist, min_idx = closest_dist(center, blue_robot)
+			if min_dist < dist_threshold and min_idx != -1:
+				blue_robot[min_idx] = center
+			elif len(blue_robot) < num_points_blue_robot:
+				blue_robot.append(center)
+
 	if robot_id == 'red':
 		vec = red_robot[0]+red_robot[1]
 	elif robot_id == 'green':
