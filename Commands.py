@@ -14,5 +14,8 @@ class Robot:
 		self.lastY = yInit
 		self.type = self.types.pop()
 
+	#def get_position(self):
+		
+	
 	# write a move command to serial
 	#def move(self, dx, dy):	
