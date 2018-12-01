@@ -21,5 +21,15 @@
 #define FORWARD LOW
 #define REVERSE HIGH
 
+/*******************
+ * Drive Constants *
+ *******************/
+
+#define MOTOR_L_STRAIGHT_FORWARD_PWM 65
+#define MOTOR_R_STRAIGHT_FORWARD_PWM 65
+
+#define MOTOR_L_STRAIGHT_REVERSE_PWM 65
+#define MOTOR_R_STRAIGHT_REVERSE_PWM 65
+
 
 #endif
