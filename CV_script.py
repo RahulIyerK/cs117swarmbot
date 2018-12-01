@@ -4,8 +4,11 @@ import numpy as np
 from collections import deque
 
 # threshold based on color
-def create_mask(hsv, greenLower, greenUpper):
-	mask = cv2.inRange(hsv, greenLower, greenUpper)
+def create_mask(hsv, colorLower, colorUpper, cL_2 = None, cU_2 = None):
+	mask = cv2.inRange(hsv, colorLower, colorUpper)
+	if cL_2 != None:
+		mask_2 = cv2.inRange(hsv, cL_2, cU_2)
+		mask = mask + mask_2
 	mask = cv2.erode(mask, None, iterations=2)
 	mask = cv2.dilate(mask, None, iterations=2)
 	return mask
@@ -124,25 +127,28 @@ def get_location(robot_id):
 		vec = green_robot[0]+green_robot[1]
 	elif robot_id == 'blue':
 		vec = blue_robot[0]+blue_robot[1]
-	theta = np.arctan(vec[0],vec[1])
+	theta = np.arctan(float(vec[1])/vec[0])
 	coord = vec/2
 	return coord, theta
 
 def main():
 	# lower and upper boundaries of colors
-	sensitivity = 10 # larger sensitivity -> more shit is classified as green
+	sensitivity = 2 # larger sensitivity -> more shit is classified as green
 	dist_threshold = 50 # dist threshold :)
-	greenLower = (60-sensitivity, 100, 50)
-	greenUpper = (60+sensitivity, 255, 255)
-	redLower = (175-sensitivity,20,70)
-	redUpper = (175+sensitivity,255,255)
+	greenLower = (70-sensitivity, 100, 20)
+	greenUpper = (70+sensitivity, 255, 255)
+	# red has 2 hue ranges :(
+	redLower_0 = (0,50,50)
+	redUpper_0 = (sensitivity,255,255)
+	redLower_1 = (180-sensitivity,50,50)
+	redUpper_1 = (180,255,255)
 	blueLower = (105-sensitivity,50,38)
 	blueUpper = (105+sensitivity,255,255)
 	
 	# define default robot positions
 	num_points_red_robot = 2
-	num_points_green_robot = 0
-	num_points_blue_robot = 1
+	num_points_green_robot = 2
+	num_points_blue_robot = 2
 	blue_robot = []
 	red_robot = []
 	green_robot = []
@@ -158,7 +164,7 @@ def main():
 		# CV preprocessing
 		blurred = cv2.GaussianBlur(frame, (5, 5), 0)
 		hsv = cv2.cvtColor(blurred, cv2.COLOR_BGR2HSV)
-		mask_red = create_mask(hsv, redLower, redUpper)
+		mask_red = create_mask(hsv, redLower_0, redUpper_0, redLower_1, redUpper_1)
 		mask_green = create_mask(hsv, greenLower, greenUpper)
 		mask_blue = create_mask(hsv, blueLower, blueUpper)
 		
@@ -189,17 +195,21 @@ def main():
 
 		# change sensitivity once all the robots are found!
 		if len(blue_robot) == num_points_blue_robot and len(red_robot) == num_points_red_robot and len(green_robot) == num_points_green_robot:
-			sensitivity = 35 # larger sensitivity -> more shit is classified as green
-			greenLower = (60-sensitivity, 100, 50)
-			greenUpper = (60+sensitivity, 255, 255)
-			redLower = (175-sensitivity,20,70)
-			redUpper = (175+sensitivity,255,255)
+			sensitivity = 10 # larger sensitivity -> more shit is classified as green
+			greenLower = (70-sensitivity, 100, 20)
+			greenUpper = (70+sensitivity, 255, 255)
+			# red has 2 hue ranges :(
+			redLower_0 = (0,50,50)
+			redUpper_0 = (sensitivity,255,255)
+			redLower_1 = (180-sensitivity,50,50)
+			redUpper_1 = (180,255,255)
 			blueLower = (105-sensitivity,50,38)
 			blueUpper = (105+sensitivity,255,255)
 		
 		# display points on screen
 		for center in green_robot:
 			cX = center[0]
+			print(cX)
 			cY = center[1]
 			cv2.circle(frame, (cX, cY), 7, (0, 255, 0), -1)
 		for center in red_robot:
