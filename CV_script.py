@@ -1,17 +1,14 @@
-#pip install opencv-python
-#pip install numpy
-
 import cv2
 import time
 import numpy as np
 from collections import deque
 
+# threshold based on color
 def create_mask(hsv, greenLower, greenUpper):
 	mask = cv2.inRange(hsv, greenLower, greenUpper)
 	mask = cv2.erode(mask, None, iterations=2)
 	mask = cv2.dilate(mask, None, iterations=2)
 	return mask
-
 	
 '''
 Note there is lots of ways of doing this...
@@ -45,6 +42,7 @@ def find_centers(mask):
 			centers.append(np.array([cX,cY]))
 	return centers
 
+# find the closest point_ in points to point and return the index of that point_ and the distance
 def closest_dist(point, points):
 	if len(points) == 0:
 		return float('inf'), -1
@@ -56,10 +54,24 @@ def closest_dist(point, points):
 			min_dist = dist
 			min_idx = i
 	return min_dist, min_idx
-	
+
+# Interface: we return the coordinate and theta of the robot :)
+# input: 'red', 'green', or 'blue'
+# output: coordinate (numpy array of length 2) and angle (float) of robot
+def get_location(robot_id):
+	if robot_id == 'red':
+		vec = red_robot[0]+red_robot[1]
+	elif robot_id == 'green':
+		vec = green_robot[0]+green_robot[1]
+	elif robot_id == 'blue':
+		vec = blue_robot[0]+blue_robot[1]
+	theta = np.arctan(vec[0],vec[1])
+	coord = vec/2
+	return coord, theta
+
 def main():
 	# lower and upper boundaries of colors
-	sensitivity = 35 # larger sensitivity -> more shit is classified as green
+	sensitivity = 10 # larger sensitivity -> more shit is classified as green
 	dist_threshold = 50 # dist threshold :)
 	greenLower = (60-sensitivity, 100, 50)
 	greenUpper = (60+sensitivity, 255, 255)
@@ -69,6 +81,9 @@ def main():
 	blueUpper = (105+sensitivity,255,255)
 	
 	# define default robot positions
+	num_points_red_robot = 2
+	num_points_green_robot = 0
+	num_points_blue_robot = 1
 	blue_robot = []
 	red_robot = []
 	green_robot = []
@@ -98,21 +113,31 @@ def main():
 			min_dist, min_idx = closest_dist(center, green_robot)
 			if min_dist < dist_threshold and min_idx != -1:
 				green_robot[min_idx] = center
-			elif len(green_robot)<1:
+			elif len(green_robot) < num_points_green_robot:
 				green_robot.append(center)			
 		for center in centers_red:
 			min_dist, min_idx = closest_dist(center, red_robot)
 			if min_dist < dist_threshold and min_idx != -1:
 				red_robot[min_idx] = center
-			elif len(red_robot)<2:
+			elif len(red_robot) < num_points_red_robot:
 				red_robot.append(center)
 		for center in centers_blue:
 			min_dist, min_idx = closest_dist(center, blue_robot)
 			if min_dist < dist_threshold and min_idx != -1:
 				blue_robot[min_idx] = center
-			elif len(blue_robot)<1:
+			elif len(blue_robot) < num_points_blue_robot:
 				blue_robot.append(center)
 
+		# change sensitivity once all the robots are found!
+		if len(blue_robot) == num_points_blue_robot and len(red_robot) == num_points_red_robot and len(green_robot) == num_points_green_robot:
+			sensitivity = 35 # larger sensitivity -> more shit is classified as green
+			greenLower = (60-sensitivity, 100, 50)
+			greenUpper = (60+sensitivity, 255, 255)
+			redLower = (175-sensitivity,20,70)
+			redUpper = (175+sensitivity,255,255)
+			blueLower = (105-sensitivity,50,38)
+			blueUpper = (105+sensitivity,255,255)
+		
 		# display points on screen
 		for center in green_robot:
 			cX = center[0]
