@@ -35,7 +35,7 @@ class CV_input:
 		# let camera start up
 		time.sleep(2.0)
 
-	def update(self):
+	def update(self, view_flag=1):
 		# grab a frame
 		ret, frame = self.capture.read()
 		
@@ -86,8 +86,7 @@ class CV_input:
 			self.initialized = 1
 
 		# Let us view the results in real time
-		#if view_flag:
-		if True:
+		if view_flag:
 			# display points on screen
 			for center in self.green_robot:
 				cX = center[0]
