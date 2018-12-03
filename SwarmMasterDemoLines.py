@@ -1,4 +1,4 @@
-from Robots import Robot
+from Commands import Robot
 from CV_script_with_classes import CV_input
 
 def main():
@@ -8,11 +8,11 @@ def main():
 
 	# setup robots
 	
-	Robot r1 = Robot('arjun',0,0,0, camera)
+	r1 = Robot('arjun',0,0,0, camera)
 
-	Robot r2 = Robot('debby',1,0,0, camera)
+	r2 = Robot('debby',1,0,0, camera)
 
-	Robot r3 = Robot('qianu',2,0,0, camera)
+	r3 = Robot('qianu',2,0,0, camera)
 
 	# run command loop
 	while True:
@@ -24,8 +24,8 @@ def main():
 
 		# wait for command to finish	
 		r1.wait()
-		r2.wait()
-		r3.wait()
+		#r2.wait()
+		#r3.wait()
 
 if __name__ == "__main__":
 	main()
