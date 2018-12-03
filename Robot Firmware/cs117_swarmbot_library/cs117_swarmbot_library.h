@@ -28,7 +28,7 @@
 #define STRAIGHT_DRIVE_SPEED 50
 #define TURN_SPEED 60
 
-#define pixels_to_millis 20
+#define pixels_to_millis 10
 
 #define turn_45_millis 290
 
