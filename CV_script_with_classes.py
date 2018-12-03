@@ -89,9 +89,9 @@ class CV_input:
 			self.blueLower = (105-sensitivity,50,38)
 			self.blueUpper = (105+sensitivity,255,255)
 			# get all offsets
-			self.offset_red = find_offset(get_location('red')[1])
-			self.offset_green = find_offset(get_location('green')[1])
-			self.offset_blue = find_offset(get_location('blue')[1])		
+			self.offset_red = self.__find_offset(self.get_location('red')[1])
+			self.offset_green = self.__find_offset(self.get_location('green')[1])
+			self.offset_blue = self.__find_offset(self.get_location('blue')[1])		
 			self.initialized = 1
 
 		# Let us view the results in real time
@@ -121,24 +121,27 @@ class CV_input:
 		if robot_id == 'red':
 			if len(self.red_robot) != 2:
 				return None
-			vec = self.red_robot[0]-self.red_robot[1]
-			theta = offset_red
+			vec_1 = self.red_robot[0]-self.red_robot[1]
+			vec_2 = self.red_robot[0]+self.red_robot[1]
+			theta = self.offset_red
 		elif robot_id == 'green':
 			if len(self.green_robot) != 2:
 				return None
-			vec = self.green_robot[0]-self.green_robot[1]
-			theta = offset_green
+			vec_1 = self.green_robot[0]-self.green_robot[1]
+			vec_2 = self.green_robot[0]+self.green_robot[1]
+			theta = self.offset_green
 		elif robot_id == 'blue':
 			if len(self.blue_robot) != 2:
 				return None
-			vec = self.blue_robot[0]-self.blue_robot[1]
-			theta = offset_blue
-		theta += np.arctan2(vec[0],vec[1])*180/np.pi
+			vec_1 = self.blue_robot[0]-self.blue_robot[1]
+			vec_2 = self.blue_robot[0]+self.blue_robot[1]
+			theta = self.offset_blue
+		theta += np.arctan2(vec_1[0],vec_1[1])*180/np.pi
 		if theta < -180:
 			theta += 360
 		if theta > 180:
 			theta -= 360
-		coord = vec/2
+		coord = vec_2/2
 		return [coord, theta]
 	
 	def delet(self):
@@ -207,7 +210,7 @@ class CV_input:
 		elif theta >= -135 and theta < -45:
 			offset = -90
 		else:
-			offset += 180
+			offset = 180
 		return offset
 
 
