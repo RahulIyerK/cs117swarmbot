@@ -19,6 +19,11 @@ def main():
 		# update positions
 		camera.update()
 
+		# find all initial positions
+		while(not (camera.initialized == 1)):
+			camera.update()
+
+
 		# move commands
 		r1.move(1,0,0)
 		r2.move(1,0,0)
