@@ -1,8 +1,10 @@
 #include <cs117_swarmbot_library.h>
-#define forward_straight_cal_delay 100
-#define reverse_straight_cal_delay 100
+#include <string.h>
+#define forward_straight_cal_delay 200
+#define reverse_straight_cal_delay 50
 #define right_45_cal_delay 290
 #define left_45_cal_delay 290
+
 
 
 void setup() {
@@ -22,6 +24,7 @@ void setup() {
   digitalWrite(MOTOR_R_DIR_PIN, FORWARD);
 
   Serial1.begin(9600);
+
 }
 
 //The idea is to move straight forward for a set period of time and stop.
@@ -30,8 +33,8 @@ void forward_cal(){
   digitalWrite(MOTOR_L_DIR_PIN, FORWARD);
   digitalWrite(MOTOR_R_DIR_PIN, FORWARD);
 
-  analogWrite(MOTOR_L_PWM_PIN, MOTOR_L_STRAIGHT_FORWARD_PWM);
-  analogWrite(MOTOR_R_PWM_PIN, MOTOR_R_STRAIGHT_FORWARD_PWM);
+  analogWrite(MOTOR_L_PWM_PIN, 40);
+  analogWrite(MOTOR_R_PWM_PIN, 40);
 
   delay(forward_straight_cal_delay); // delay_time specified in milliseconds
 
@@ -53,7 +56,6 @@ void reverse_cal()
   analogWrite(MOTOR_L_PWM_PIN, 0);
   analogWrite(MOTOR_R_PWM_PIN, 0);
 }
-
 
 //calibration to turn right for 45 degrees
 void right_cal(){
@@ -86,13 +88,12 @@ void left_cal(){
 }
 
 
-
 void loop() {
 //  Serial1.write("write tomat\n");
-//  forward_cal();
+  forward_cal();
 //  reverse_cal();
 //  right_cal();
-  left_cal();
+//  left_cal();
   delay(2000);
 
 }

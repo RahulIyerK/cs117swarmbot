@@ -25,11 +25,11 @@
  * Drive Constants *
  *******************/
 
-#define MOTOR_L_STRAIGHT_FORWARD_PWM 65
-#define MOTOR_R_STRAIGHT_FORWARD_PWM 65
+#define STRAIGHT_DRIVE_SPEED 50
+#define TURN_SPEED 60
 
-#define MOTOR_L_STRAIGHT_REVERSE_PWM 65
-#define MOTOR_R_STRAIGHT_REVERSE_PWM 65
+#define pixels_to_millis 20
 
+#define turn_45_millis 290
 
 #endif
