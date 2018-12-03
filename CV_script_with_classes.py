@@ -134,7 +134,10 @@ class CV_input:
 			vec = self.blue_robot[0]-self.blue_robot[1]
 			theta = offset_blue
 		theta += np.arctan2(vec[0],vec[1])*180/np.pi
-		theta = theta % 360
+		if theta < -180:
+			theta += 360
+		if theta > 180:
+			theta -= 360
 		coord = vec/2
 		return [coord, theta]
 	
