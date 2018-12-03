@@ -17,7 +17,7 @@ class Robot:
 		self.type = self.types.pop()
 
 	# use opencv code to get current position of the robot
-	def get_position(self):
+	def update_position(self):
 		coord, angle = camera.get_location(self.type)
 		self.theta = angle
 		self.lastX = coord[0]
@@ -30,4 +30,3 @@ class Robot:
 	# wait until a done signal is received, update position
 	def wait(self):
 		self.ser.read_until('< done >')
-		self.get_position()
