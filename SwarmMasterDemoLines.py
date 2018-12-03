@@ -12,7 +12,7 @@ def main():
 
 	r2 = Robot('debby',1,0,0, camera)
 
-	r3 = Robot('qianu',2,0,0, camera)
+	r3 = Robot('qianru',2,0,0, camera)
 
 	# run command loop
 	while True:
