@@ -110,15 +110,15 @@ class CV_input:
 	# input: 'red', 'green', or 'blue'
 	# output: coordinate (numpy array of length 2) and angle (float) of robot
 	def get_location(self, robot_id):
-		if robot_id == 'arjun':
+		if robot_id == 'red':
 			if len(self.red_robot) != 2:
 				return None
 			vec = self.red_robot[0]-self.red_robot[1]
-		elif robot_id == 'qianru':
+		elif robot_id == 'green':
 			if len(self.green_robot) != 2:
 				return None
 			vec = self.green_robot[0]-self.green_robot[1]
-		elif robot_id == 'debby':
+		elif robot_id == 'blue':
 			if len(self.blue_robot) != 2:
 				return None
 			vec = self.blue_robot[0]-self.blue_robot[1]
