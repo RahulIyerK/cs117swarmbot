@@ -25,13 +25,15 @@ def main():
 	while True:
 		# update positions
 		camera.update()
-
-		r1.move(1,0,0)
-		r2.move(1,0,0)
-		r3.move(1,0,0)
+		print('before')
+		r1.move(10,10,100)
+		print('after')
+		# r2.move(1,0,0)
+		# r3.move(1,0,0)
 
 		# wait for command to finish	
 		r1.wait()
+		print('afterafter')
 		#r2.wait()
 		#r3.wait()
 		intrrpt = cv2.waitKey(30) & 0xff
