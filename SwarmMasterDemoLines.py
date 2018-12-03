@@ -18,9 +18,9 @@ def main():
 	while True:
 		# update positions
 		camera.update()
-		r1.move(1,1,0)
-		r2.move(1,1,0)
-		r3.move(1,1,0)
+		r1.move(1,0,0)
+		r2.move(1,0,0)
+		r3.move(1,0,0)
 
 		# wait for command to finish	
 		r1.wait()

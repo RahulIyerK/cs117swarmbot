@@ -6,7 +6,7 @@ class Robot:
 	ser = serial.Serial('/dev/ttyUSB0');
 	
 	# colors available - three available, must be unique for every instance
-	types = ['red', 'green', 'blue']
+	types = ['red', 'blue', 'green']
 
 	def __init__(self, rID, xInit, yInit, camera):
 		self.rID = rID
