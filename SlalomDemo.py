@@ -1,5 +1,6 @@
 from Commands import Robot
 from CV_script_with_classes import CV_input
+import cv2
 
 def main():
 	
