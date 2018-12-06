@@ -33,14 +33,14 @@ def main():
 		# check flag
 		if(forwardFlag):
 			# move forward
-			r1.move(width/2,0,0)
-			r2.move(width/2,0,0)
-			r3.move(width/2,0,0)
+			r1.move(10,0,0)
+			r2.move(10,0,0)
+			r3.move(10,0,0)
 		else:	
 			# move backward
-			r1.move(-width/2,0,0)
-			r2.move(-width/2,0,0)
-			r3.move(-width/2,0,0)
+			r1.move(-10,0,0)
+			r2.move(-10,0,0)
+			r3.move(-10,0,0)
 
 		# wait for command to finish	
 		r1.wait()
