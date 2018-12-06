@@ -40,7 +40,7 @@ class Robot:
 			time.sleep(0.5)
 			count += 1
 			# timeout check
-			if(count == 4)
+			if(count == 4):
 				return 404
 
 		self.ser.read_until(b'< done >')
