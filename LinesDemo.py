@@ -26,10 +26,10 @@ def main():
 		# update positions
 		camera.update()
 		print('before')
-		r1.move(10,10,100)
+		r1.move(10,10,0)
 		print('after')
-		# r2.move(1,0,0)
-		# r3.move(1,0,0)
+		r2.move(10,0,0)
+		r3.move(10,0,0)
 
 		# wait for command to finish	
 		r1.wait()
