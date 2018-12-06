@@ -11,8 +11,8 @@ class CV_input:
 		# lower and upper boundaries of colors
 		sensitivity = 2 # larger sensitivity -> more shit is classified as green
 		self.dist_threshold = 50 # dist threshold :)
-		self.greenLower = (70-sensitivity, 100, 20)
-		self.greenUpper = (70+sensitivity, 255, 255)
+		self.greenLower = (60-sensitivity, 100, 20)
+		self.greenUpper = (80+sensitivity, 255, 255)
 		# red has 2 hue ranges :(
 		self.redLower_0 = (0,50,50)
 		self.redUpper_0 = (sensitivity,255,255)
@@ -79,8 +79,8 @@ class CV_input:
 		# change sensitivity once all the robots are found!
 		if (not self.initialized) and len(self.blue_robot) == self.num_points_blue_robot and len(self.red_robot) == self.num_points_red_robot and len(self.green_robot) == self.num_points_green_robot:
 			sensitivity = 10 # larger sensitivity -> more shit is classified as green
-			self.greenLower = (70-sensitivity, 100, 20)
-			self.greenUpper = (70+sensitivity, 255, 255)
+			self.greenLower = (60-sensitivity, 100, 20)
+			self.greenUpper = (80+sensitivity, 255, 255)
 			# red has 2 hue ranges :(
 			self.redLower_0 = (0,50,50)
 			self.redUpper_0 = (sensitivity,255,255)
