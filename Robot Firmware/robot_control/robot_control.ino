@@ -5,7 +5,7 @@
 #define right_45_cal_delay 290
 #define left_45_cal_delay 290
 
-char rID[6] = "arjun";
+char rID[6] = "revaz";
 int xCom = 0;
 int yCom = 0;
 int thetaCom = 0;
