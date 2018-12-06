@@ -34,8 +34,8 @@ def main():
 		# wait for command to finish	
 		r1.wait()
 		print('afterafter')
-		#r2.wait()
-		#r3.wait()
+		r2.wait()
+		r3.wait()
 		intrrpt = cv2.waitKey(30) & 0xff
 		if intrrpt == 27:
 			camera.delet()
