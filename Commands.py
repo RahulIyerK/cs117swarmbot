@@ -39,4 +39,4 @@ class Robot:
 			time.sleep(0.5)
 		self.ser.read_until(b'< done >')
 		print('end wait')
-		self.get_position()
+		self.update_position()
