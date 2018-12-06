@@ -10,7 +10,7 @@ class CV_input:
 	def __init__(self):
 		# lower and upper boundaries of colors
 		sensitivity = 2 # larger sensitivity -> more shit is classified as green
-		self.dist_threshold = 10 # dist threshold :)
+		self.dist_threshold = 50 # dist threshold :)
 		self.greenLower = (70-sensitivity, 100, 20)
 		self.greenUpper = (70+sensitivity, 255, 255)
 		# red has 2 hue ranges :(
@@ -30,12 +30,17 @@ class CV_input:
 		self.green_robot = []
 		self.initialized = 0
 		
+		# set default offsets
+		self.offset_red = 0.
+		self.offset_green = 0.
+		self.offset_blue = 0.
+		
 		# grab video capture from webcam
 		self.capture = cv2.VideoCapture(0)
 		# let camera start up
 		time.sleep(2.0)
 
-	def update(self):
+	def update(self, view_flag = 1):
 		# grab a frame
 		ret, frame = self.capture.read()
 		
@@ -83,11 +88,14 @@ class CV_input:
 			self.redUpper_1 = (180,255,255)
 			self.blueLower = (105-sensitivity,50,38)
 			self.blueUpper = (105+sensitivity,255,255)
+			# get all offsets
+			self.offset_red = self.__find_offset(self.get_location('red')[1])
+			self.offset_green = self.__find_offset(self.get_location('green')[1])
+			self.offset_blue = self.__find_offset(self.get_location('blue')[1])		
 			self.initialized = 1
 
 		# Let us view the results in real time
-		#if view_flag:
-		if True:
+		if view_flag:
 			# display points on screen
 			for center in self.green_robot:
 				cX = center[0]
@@ -113,17 +121,27 @@ class CV_input:
 		if robot_id == 'red':
 			if len(self.red_robot) != 2:
 				return None
-			vec = self.red_robot[0]-self.red_robot[1]
+			vec_1 = self.red_robot[0]-self.red_robot[1]
+			vec_2 = self.red_robot[0]+self.red_robot[1]
+			theta = self.offset_red
 		elif robot_id == 'green':
 			if len(self.green_robot) != 2:
 				return None
-			vec = self.green_robot[0]-self.green_robot[1]
+			vec_1 = self.green_robot[0]-self.green_robot[1]
+			vec_2 = self.green_robot[0]+self.green_robot[1]
+			theta = self.offset_green
 		elif robot_id == 'blue':
 			if len(self.blue_robot) != 2:
 				return None
-			vec = self.blue_robot[0]-self.blue_robot[1]
-		theta = np.arctan2(vec[0],vec[1])*180/np.pi
-		coord = vec/2
+			vec_1 = self.blue_robot[0]-self.blue_robot[1]
+			vec_2 = self.blue_robot[0]+self.blue_robot[1]
+			theta = self.offset_blue
+		theta += np.arctan2(vec_1[0],vec_1[1])*180/np.pi
+		if theta < -180:
+			theta += 360
+		if theta > 180:
+			theta -= 360
+		coord = vec_2/2
 		return [coord, theta]
 	
 	def delet(self):
@@ -183,12 +201,24 @@ class CV_input:
 				min_dist = dist
 				min_idx = i
 		return min_dist, min_idx
+	
+	def __find_offset(self, theta):
+		if theta >= 45 and theta < 135:
+			offset = 90
+		elif theta >= -45 and theta < 45:
+			offset = 0
+		elif theta >= -135 and theta < -45:
+			offset = -90
+		else:
+			offset = 180
+		return offset
+
 
 def main():
 	H = CV_input()
 	while True:
 		H.update()
-		out = H.get_location('arjun')
+		out = H.get_location('red')
 		if out is not None:
 			coord, theta = out[0], out[1]
 			print("coord: (" + str(coord[0]) + ",\t" + str(coord[1]) + ")")

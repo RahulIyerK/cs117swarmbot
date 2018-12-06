@@ -1,9 +1,10 @@
 import serial
+import time
 
 class Robot:
 
 	# serial port communication
-	ser = serial.Serial('/dev/tty15');
+	ser = serial.Serial('COM4', 9600);
 	
 	# colors available - three available, must be unique for every instance
 	types = ['red', 'blue', 'green']
@@ -18,15 +19,22 @@ class Robot:
 
 	# use opencv code to get current position of the robot
 	def update_position(self):
-		coord, angle = camera.get_location(self.type)
+		out = self.camera.get_location(self.type)
+		coord, angle = out[0], out[1]
 		self.theta = angle
 		self.lastX = coord[0]
 		self.lasty = coord[1]
 	
 	# write a move command to serial
-	def move(self, dx, dy, dtheta):	
-		self.ser.write(bytes('< '+str(self.rID)+' '+str(dx)+' '+str(dy)+str(dtheta)+' >','utf-8'))
+	def move(self, dx, dy, dtheta):
+		print('< '+str(self.rID)+' '+str(dx)+' '+str(dy) + ' ' +str(dtheta)+' >')
+		self.ser.write(bytes('< '+str(self.rID)+' '+str(dx)+' '+str(dy) + ' ' +str(dtheta)+' >','ascii'))
 
 	# wait until a done signal is received, update position
 	def wait(self):
-		self.ser.read_until('< done >')
+		print('start wait')
+		while(self.ser.inWaiting() < 1):
+			time.sleep(0.5)
+		self.ser.read_until(b'< done >')
+		print('end wait')
+		self.get_position()
