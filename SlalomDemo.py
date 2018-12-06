@@ -12,7 +12,7 @@ def main():
 
 	r2 = Robot('debby',1,0,0, camera)
 
-	r3 = Robot('qianu',2,0,0, camera)
+	r3 = Robot('qianru',2,0,0, camera)
 
 	# end flag and distance
 	forwardFlag = True
@@ -20,13 +20,15 @@ def main():
 	startX = 150
 
 	# run command loop
-	while True:
-		# update positions
+	while camera.initialized != 1:
 		camera.update()
+		intrrpt = cv2.waitKey(30) & 0xff
+		if intrrpt == 27:
+			camera.delet()
+			break
 
-		# find all initial positions
-		while(not (camera.initialized == 1)):
-			camera.update()
+	# run command loop
+	while True:
 
 		# check flag
 		if(forwardFlag):
@@ -57,6 +59,12 @@ def main():
 			forwardFlag = False
 		if(r1.lastX <= startX and r2.lastX <= startX and r3.lastX <= startX)
 			forwardFlag = True
+
+		# camera interrupt, necessary fr cv
+		intrrpt = cv2.waitKey(30) & 0xff
+		if intrrpt == 27:
+			camera.delet()
+			break
 
 if __name__ == "__main__":
 	main()
