@@ -34,6 +34,8 @@ class Robot:
 	def wait(self):
 		print('start wait')
 		while(self.ser.inWaiting() < 1):
+			# update camera position to preserve averages
+			self.camera.update()
 			time.sleep(0.5)
 		self.ser.read_until(b'< done >')
 		print('end wait')
