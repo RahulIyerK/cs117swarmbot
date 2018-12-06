@@ -33,10 +33,17 @@ class Robot:
 	# wait until a done signal is received, update position
 	def wait(self):
 		print('start wait')
+		count = 0
 		while(self.ser.inWaiting() < 1):
 			# update camera position to preserve averages
 			self.camera.update()
 			time.sleep(0.5)
+			count += 1
+			# timeout check
+			if(count == 4)
+				return 404
+
 		self.ser.read_until(b'< done >')
 		print('end wait')
 		self.update_position()
+		return 0
