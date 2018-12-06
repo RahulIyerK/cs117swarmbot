@@ -48,8 +48,10 @@ def main():
 		r3.update_position()
 
 		# check for end of slalom, and turn if necessary
-		if((r1.lastX >= width and r2.lastX >= width and r3.lastX >= width)||(r1.lastX <= startX and r2.lastX <= startX and r3.lastX <= startX))
-
+		if((r1.lastX >= width and r2.lastX >= width and r3.lastX >= width)||(r1.lastX <= startX and r2.lastX <= startX and r3.lastX <= startX)):
+			r1.move(0,0,180)
+			r2.move(0,0,180)
+			r3.move(0,0,180)
 		# camera interrupt, necessary fr cv
 		intrrpt = cv2.waitKey(30) & 0xff
 		if intrrpt == 27:

@@ -55,9 +55,9 @@ def main():
 		r3.update_position()
 
 		# check for end of slalom
-		if(r1.lastX >= width and r2.lastX >= width and r3.lastX >= width)
+		if(r1.lastX >= width and r2.lastX >= width and r3.lastX >= width):
 			forwardFlag = False
-		if(r1.lastX <= startX and r2.lastX <= startX and r3.lastX <= startX)
+		if(r1.lastX <= startX and r2.lastX <= startX and r3.lastX <= startX):
 			forwardFlag = True
 
 		# camera interrupt, necessary fr cv
